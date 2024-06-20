@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 from scipy.spatial import distance_matrix
 from itertools import combinations
 from typing import List, Tuple
-
+import os
 # Função auxiliar para calcular o comprimento total da árvore
 def calculate_tree_length(points: np.ndarray, connections: List[Tuple[int, int]]) -> float:
     """
@@ -323,25 +323,30 @@ def plot_terminals(terminals: np.ndarray):
     plt.legend()
     plt.show()
 
-# Definir os pontos terminais
-terminals = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]) # 4 pontos terminais
-# triangle 
-terminals = np.array([[0, 1], [1, 1], [0.5, 1 - np.sqrt(3)/2]]) # 3 pontos terminais
-#terminals = np.array([[-4, 3.45], [-3.7, 3.03], [-2.74, 3.47], [-2, 2], [1.22, 0.57], [1, -2], [-1.98, -3.33], [5.38, -0.63]])
 
-plot_terminals(terminals    )
-# Parâmetros para o Tempera Simulada
-num_steiner_points = 2
-initial_temp = 5
-cooling_rate = 0.99
-max_iterations = 100000
+if __name__ == "__main__":
+    if not os.path.exists('plots'):
+        os.makedirs('plots')
+    # Definir os pontos terminais
+    terminals = np.array([[0, 0], [0, 1], [1, 0], [1, 1]]) # 4 pontos terminais
+    # triangle 
+    terminals = np.array([[0, 1], [1, 1], [0.5, 1 - np.sqrt(3)/2]]) # 3 pontos terminais
+    #terminals = np.array([[-4, 3.45], [-3.7, 3.03], [-2.74, 3.47], [-2, 2], [1.22, 0.57], [1, -2], [-1.98, -3.33], [5.38, -0.63]])
 
-# Gerar e plotar a solução inicial
-initial_points, initial_connections = initial_solution(terminals, num_steiner_points)
-initial_length = calculate_tree_length(initial_points, initial_connections)
-print(f'Comprimento inicial: {initial_length}')
-print(f'Pontos iniciais: {initial_points}')
-print(f'Conexões iniciais: {initial_connections}')
+    plot_terminals(terminals)
+    # Parâmetros para o Tempera Simulada
+    num_steiner_points = 2
+    initial_temp = 5
+    cooling_rate = 0.99
+    max_iterations = 100000
 
-# Executar o algoritmo de Tempera Simulada
-best_points, best_connections, best_length = simulated_annealing(terminals, num_steiner_points, initial_temp, cooling_rate, max_iterations, record_interations=False)
+    # Gerar e plotar a solução inicial
+    initial_points, initial_connections = initial_solution(terminals, num_steiner_points)
+    initial_length = calculate_tree_length(initial_points, initial_connections)
+    print(f'Comprimento inicial: {initial_length}')
+    print(f'Pontos iniciais: {initial_points}')
+    print(f'Conexões iniciais: {initial_connections}')
+
+    # Executar o algoritmo de Tempera Simulada
+    best_points, best_connections, best_length = simulated_annealing(terminals, num_steiner_points, initial_temp, cooling_rate, max_iterations, record_interations=False)
+
